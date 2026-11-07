@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="de" data-root="{{ request.script_root }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Ophir Mangas · Anmeldung</title>
+  <link rel="icon" href="{{ url_for('static', filename='icons/icon-192.png') }}">
+  <!-- Light or dark: what the user had on last (the app keeps it in a cookie), else what the
+       system asks for. Set before the first paint so the page does not flash the other one. -->
+  <script>
+    (function () {
+      var match = document.cookie.match(/(?:^|; )ophir_mangas_theme=(light|dark)(?:;|$)/);
+      if (match) document.documentElement.dataset.theme = match[1];
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Web fonts are decoration: loaded without blocking rendering, so the page does not hang on
+       fonts.googleapis.com when there is no internet (offline use, DNS filter) -- the system font
+       fallback from the stylesheet shows until they arrive. -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="{{ asset_url('login.css') }}">
+</head>
+<body class="login-page">
+  <main class="login-layout">
+    <section class="login-showcase" aria-hidden="true">
+      <div class="login-brand">
+        <svg class="brand-symbol" viewBox="0 0 44 44" aria-hidden="true"><circle class="brand-card-spark" cx="33.5" cy="8.5" r="3.5"/><path class="brand-card-front" d="M22 15.5c-3.2-2.6-7.6-3.6-12.5-3.2v21.4c4.9-.4 9.3.6 12.5 3.2 3.2-2.6 7.6-3.6 12.5-3.2V12.3c-4.9-.4-9.3.6-12.5 3.2z"/><path class="brand-card-line" d="M22 15.5v21.4"/></svg>
+        <span class="brand-word"><b>OPHIR</b><span>MANGAS</span></span>
+      </div>
+      <div class="login-stage">
+        <div class="login-glow"></div>
+        <div class="login-card login-card-back"><span>RELEASE</span><b>Await.</b></div>
+        <div class="login-card login-card-mid"><span>READ</span><b>Enjoy.</b></div>
+        <div class="login-card login-card-front"><span>COLLECT</span><b>Discover.</b></div>
+        <div class="login-plate"></div>
+      </div>
+      <div class="login-quote">
+        <span class="login-eyebrow">DEINE SAMMLUNG. EIN ORT.</span>
+        <h1>Jede Reihe erzählt eine Geschichte.</h1>
+        <p>Organisiere deine Mangasammlung, finde fehlende Bände und behalte Neuerscheinungen und deinen Lesestand im Blick.</p>
+      </div>
+    </section>
+    <section class="login-panel">
+      <div class="login-mobile-brand">
+        <svg class="brand-symbol" viewBox="0 0 44 44" aria-hidden="true"><circle class="brand-card-spark" cx="33.5" cy="8.5" r="3.5"/><path class="brand-card-front" d="M22 15.5c-3.2-2.6-7.6-3.6-12.5-3.2v21.4c4.9-.4 9.3.6 12.5 3.2 3.2-2.6 7.6-3.6 12.5-3.2V12.3c-4.9-.4-9.3.6-12.5 3.2z"/><path class="brand-card-line" d="M22 15.5v21.4"/></svg>
+        <span class="brand-word"><b>OPHIR</b><span>MANGAS</span></span>
+      </div>
+      <form method="post" class="login-form">
+        <span class="login-eyebrow">WILLKOMMEN ZURÜCK</span>
+        <h2>Sammlung öffnen</h2>
+        <p class="login-lead">Melde dich an, um zu deinen Mangas zu kommen.</p>
+        {% if error %}<div class="login-error" role="alert">{{ error }}</div>{% endif %}
+        <label><span>Benutzername</span><input name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required autofocus></label>
+        <label><span>Passwort</span><input name="password" type="password" autocomplete="current-password" required></label>
+        <button class="login-submit" type="submit">Anmelden <span aria-hidden="true">→</span></button>
+        {% if oauth_enabled %}
+        <div class="login-divider"><span>oder</span></div>
+        <a class="login-sso" href="{{ url_for('oauth_login', next=request.args.get('next')) }}">Mit {{ oauth_provider_name }} anmelden</a>
+        {% endif %}
+      </form>
+      <p class="login-footer">Self-hosted · Deine Daten bleiben bei dir</p>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="de" data-root="{{ request.script_root }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#090909">
+  <title>Ophir Mangas</title>
+  <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+  <link rel="icon" href="{{ url_for('static', filename='icons/icon-192.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/icon-180.png') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Web fonts are decoration: loaded without blocking rendering, so the page does not hang on
+       fonts.googleapis.com when it is out of reach -- the system font shows until they arrive. -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="{{ asset_url('app.css') }}">
+  <link rel="stylesheet" href="{{ asset_url('mobile-theme.css') }}">
+  <link rel="stylesheet" href="{{ asset_url('mobile-pages.css') }}">
+  <link rel="stylesheet" href="{{ asset_url('responsive-theme.css') }}">
+  <link rel="stylesheet" href="{{ asset_url('stat-pill.css') }}">
+  <link rel="stylesheet" href="{{ asset_url('dark-appearance.css') }}">
+  <link rel="stylesheet" href="{{ asset_url('design-system.css') }}">
+  <link rel="stylesheet" href="{{ asset_url('mangas.css') }}">
+</head>
+<body class="dark mobile-modern">
+  <script>if(/(?:^|; )ophir_mangas_theme=light(?:;|$)/.test(document.cookie))document.body.classList.add('mobile-light');</script>
+  <div id="app" class="app-shell">
+    <aside class="sidebar">
+      <button class="brand" data-route="dashboard">
+        <svg class="brand-symbol" viewBox="0 0 44 44" aria-hidden="true">
+          <circle class="brand-card-spark" cx="33.5" cy="8.5" r="3.5"/>
+          <path class="brand-card-front" d="M22 15.5c-3.2-2.6-7.6-3.6-12.5-3.2v21.4c4.9-.4 9.3.6 12.5 3.2 3.2-2.6 7.6-3.6 12.5-3.2V12.3c-4.9-.4-9.3.6-12.5 3.2z"/>
+          <path class="brand-card-line" d="M22 15.5v21.4"/>
+        </svg>
+        <span class="brand-word"><b>OPHIR</b><span>MANGAS</span></span>
+      </button>
+      <button id="sidebar-collapse" class="sidebar-collapse" title="Seitenleiste einklappen">‹</button>
+      <nav class="main-nav" aria-label="Hauptnavigation">
+        <button class="nav-item active" data-route="dashboard"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.5 12 4l8 7.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z"/></svg></span><span>Übersicht</span></button>
+        <button class="nav-item" data-route="catalog"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h11v16H8z"/><path d="M5 7v13h11"/><path d="M11 8h5M11 12h5"/></svg></span><span>Katalog</span><span class="count-badge hidden" data-count="catalog">0</span></button>
+        <button class="nav-item" data-route="collection"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h3v16H5zM10 4h3v16h-3z"/><path d="m15.5 5.2 2.9-.8 3.6 14.9-2.9.8z"/></svg></span><span>Sammlung</span><span class="count-badge hidden" data-count="collection">0</span></button>
+        <button class="nav-item" data-route="reading"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.5C9.6 4.8 6.4 4.2 3 4.5v14c3.4-.3 6.6.3 9 2 2.4-1.7 5.6-2.3 9-2v-14c-3.4-.3-6.6.3-9 2z"/><path d="M12 6.5v14"/></svg></span><span>Lesen</span><span class="count-badge hidden" data-count="reading">0</span></button>
+        <button class="nav-item" data-route="gaps"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h3v14H4zM9 5h3v14H9z"/><path d="M14 5h3v14h-3z" stroke-dasharray="2.2 2.2"/><path d="M19 5h1.5v14H19"/></svg></span><span>Lücken</span></button>
+        <button class="nav-item" data-route="calendar"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/><path d="m10 15 1.6 1.6L15 13"/></svg></span><span>Neuerscheinungen</span></button>
+        <button class="nav-item" data-route="watchlist"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.8-9A5.4 5.4 0 0 1 12 6a5.4 5.4 0 0 1 9.8 5.5c-2.3 4.4-9.8 9-9.8 9Z"/></svg></span><span>Wunschlisten</span><span class="count-badge hidden" data-count="wished">0</span></button>
+        <button class="nav-item" data-route="preorders"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 7.5 12 3l8.5 4.5v9L12 21l-8.5-4.5z"/><path d="m3.5 7.5 8.5 4.5 8.5-4.5M12 12v9"/></svg></span><span>Vorbestellungen</span><span class="count-badge hidden" data-count="preorders">0</span></button>
+      </nav>
+      <div class="sidebar-spacer"></div>
+      <div id="edit-panel" class="edit-panel">
+        <span class="edit-panel-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="m4 20 4.2-1 10.4-10.4a2.1 2.1 0 0 0-3-3L5.2 16 4 20Z"/><path d="m14.5 6.7 3 3"/></svg>
+        </span>
+        <div class="edit-panel-copy"><strong>Schnell&shy;bearbeitung</strong><span>＋ und ✓ auf den Kacheln</span></div>
+        <button id="edit-toggle" class="switch" role="switch" aria-checked="false" aria-label="Schnellbearbeitung umschalten"><span></span></button>
+      </div>
+      <div class="user-menu">
+        <div id="user-popup" class="user-popup hidden" role="menu">
+          <button class="nav-item" data-route="settings" role="menuitem"><span class="nav-icon">⚙</span><span>Einstellungen</span></button>
+          <button class="nav-item" id="importexport-open" role="menuitem"><span class="nav-icon">⇅</span><span>Import / Export</span></button>
+          <button class="nav-item admin-only" data-route="admin" role="menuitem"><span class="nav-icon">⚙</span><span>Admin</span></button>
+          <form action="{{ url_for('logout') }}" method="post" class="user-popup-logout"><button class="nav-item" role="menuitem"><span class="nav-icon">↗</span><span>Abmelden</span></button></form>
+        </div>
+        <button id="user-avatar" class="avatar" title="Menü öffnen" aria-haspopup="true" aria-expanded="false">OM</button>
+        <div class="user-menu-info"><strong id="user-name"></strong><small id="user-role">Sammler</small></div>
+        <form action="{{ url_for('logout') }}" method="post"><button title="Abmelden">↗</button></form>
+      </div>
+    </aside>
+
+    <header class="topbar">
+      <h1 class="mobile-topbar-title">Übersicht</h1>
+      <button id="global-search-open" class="global-search"><span>⌕</span><span>Reihen, Ausgaben, Autor:innen oder ISBN suchen …</span><kbd>⌘ K</kbd></button>
+      <button type="button" class="mobile-profile-button" data-route="settings" aria-label="Einstellungen" title="Einstellungen">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M4.7 20c1.4-3.5 4.3-5.4 7.3-5.4s5.9 1.9 7.3 5.4"/></svg>
+      </button>
+      <div class="top-actions">
+        <button type="button" class="secondary-button mg-scan-button" data-scan title="ISBN-Strichcode scannen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7V5a1 1 0 0 1 1-1h2M17 4h2a1 1 0 0 1 1 1v2M20 17v2a1 1 0 0 1-1 1h-2M7 20H5a1 1 0 0 1-1-1v-2"/><path d="M8 8v8M11 8v8M13.5 8v8M16 8v8"/></svg><span>Scannen</span></button>
+        <button type="button" class="primary-button fig-new-button" data-new-manga>＋ Manga</button>
+        <div id="edit-indicator" class="edit-indicator" role="button" tabindex="0" aria-label="Schnellbearbeitung ist an – klicken zum Beenden" title="Schnellbearbeitung ist an – klicken zum Beenden"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 20 4.2-1 10.4-10.4a2.1 2.1 0 0 0-3-3L5.2 16 4 20Z"/><path d="m14.5 6.7 3 3"/></svg></div>
+      </div>
+    </header>
+
+    <main id="content" class="content"><div class="page-loader"><span></span><p>Sammlung wird geladen …</p></div></main>
+  </div>
+
+  <nav id="mobile-tabbar" class="mobile-tabbar" aria-label="Hauptnavigation">
+    <button class="mt-tab active" data-route="dashboard" aria-label="Übersicht"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 4l8 7.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z"/></svg></button>
+    <button class="mt-tab" data-route="catalog" aria-label="Katalog"><svg viewBox="0 0 24 24"><path d="M8 4h11v16H8z"/><path d="M5 7v13h11"/></svg></button>
+    <button class="mt-tab" data-route="collection" aria-label="Sammlung"><svg viewBox="0 0 24 24"><path d="M5 4h3v16H5zM10 4h3v16h-3z"/><path d="m15.5 5.2 2.9-.8 3.6 14.9-2.9.8z"/></svg></button>
+    <button class="mt-tab mt-tab-add" type="button" data-new-manga aria-label="Manga anlegen" title="Manga anlegen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+    <button class="mt-tab" data-route="reading" aria-label="Lesen"><svg viewBox="0 0 24 24"><path d="M12 6.5C9.6 4.8 6.4 4.2 3 4.5v14c3.4-.3 6.6.3 9 2 2.4-1.7 5.6-2.3 9-2v-14c-3.4-.3-6.6.3-9 2z"/><path d="M12 6.5v14"/></svg></button>
+    <button class="mt-tab" data-route="calendar" aria-label="Neuerscheinungen"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></button>
+  </nav>
+
+  <div id="search-overlay" class="overlay hidden">
+    <div class="search-dialog">
+      <div class="search-input-wrap"><span>⌕</span><input id="global-search-input" placeholder="Im Katalog suchen …" autocomplete="off"><kbd>ESC</kbd></div>
+      <div id="search-results" class="search-results"><div class="empty-search"><b>Finde jede Reihe. Sofort.</b><span>Titel, Originaltitel, Autor:in, Verlag oder ISBN.</span></div></div>
+    </div>
+  </div>
+
+  <div id="edition-modal" class="overlay hidden"><div id="edition-dialog" class="fig-dialog mg-edition-dialog" role="dialog" aria-modal="true"></div></div>
+  <div id="volume-modal" class="overlay hidden"><div id="volume-dialog" class="fig-dialog" role="dialog" aria-modal="true"></div></div>
+
+  <div id="import-modal" class="overlay hidden">
+    <div class="utility-dialog import-dialog">
+      <div class="dialog-head"><div><span class="eyebrow">SICHERN &amp; WIEDERHERSTELLEN</span><h2 id="importexport-title">Exportieren</h2></div><button class="close-button" data-close="import-modal">×</button></div>
+      <div class="segmented importexport-toggle"><button type="button" data-ie-mode="export" class="active">Export</button><button type="button" data-ie-mode="import">Wiederherstellen</button></div>
+      <div id="importexport-import-section" class="hidden">
+        <label class="import-text-label">Sicherung wählen (JSON)<input type="file" id="import-json-file" accept="application/json,.json"></label>
+        <div class="format-help">Stellt Sammlung, Vorbestellungen, Wunschlisten, Lesestand und gesammelte Ausgaben aus einer mit „JSON-Sicherung“ erzeugten Datei wieder her – auch auf einer anderen Ophir-Mangas-Instanz: fehlende Reihen, Ausgaben und Bände werden im Katalog angelegt. Schon vorhandene Vorbestellungen werden übersprungen.</div>
+        <div id="import-preview" class="import-preview"></div>
+        <div class="dialog-actions"><label class="radio-label"><input type="radio" name="strategy" value="add" checked> Zur Sammlung hinzufügen</label><label class="radio-label"><input type="radio" name="strategy" value="replace"> Sammlung ersetzen</label><span class="spacer"></span><button class="primary-button" id="apply-import" disabled>Wiederherstellen</button></div>
+      </div>
+      <div id="importexport-export-section">
+        <p class="muted">Lade deine Daten jederzeit herunter.</p>
+        <div class="export-options">
+          <a href="{{ url_for('export_json') }}" class="export-card"><span class="file-icon">{ }</span><div><b>JSON-Sicherung</b><small>Sammlung, Lesestand, Vorbestellungen und Wunschlisten mit allen Katalogdaten</small></div><span>↓</span></a>
+          <a href="{{ url_for('export_csv') }}" class="export-card"><span class="file-icon">CSV</span><div><b>Sammlung als Tabelle</b><small>Für Excel, Numbers und andere Tracker</small></div><span>↓</span></a>
+          <a href="{{ url_for('export_preorders_csv') }}" class="export-card"><span class="file-icon">CSV</span><div><b>Vorbestellungen als Tabelle</b><small>Mit Preisen, Zahlungen und Terminen</small></div><span>↓</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-stack" class="toast-stack"></div>
+  <button type="button" id="back-to-top" class="back-to-top hidden" aria-label="Nach oben springen">↑</button>
+  <script src="{{ asset_url('filter-panel.js') }}"></script>
+  <script src="{{ asset_url('stat-pill.js') }}"></script>
+  {# Plain scripts sharing one global scope, in this order: core first, main (start-up) last. #}
+  <script src="{{ asset_url('js/core.js') }}"></script>
+  <script src="{{ asset_url('js/scanner.js') }}"></script>
+  <script src="{{ asset_url('js/mangas-ui.js') }}"></script>
+  <script src="{{ asset_url('js/views.js') }}"></script>
+  <script src="{{ asset_url('js/dashboard.js') }}"></script>
+  <script src="{{ asset_url('js/settings.js') }}"></script>
+  <script src="{{ asset_url('js/admin.js') }}"></script>
+  <script src="{{ asset_url('js/import.js') }}"></script>
+  <script src="{{ asset_url('js/main.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+services:
+  ophir-mangas:
+    build: .
+    image: ghcr.io/axelcypher/ophir-mangas:latest
+    container_name: ophirmangas
+    restart: unless-stopped
+    ports:
+      - "18083:8080"
+    environment:
+      DATABASE_PATH: /data/ophir-mangas.db
+      SECRET_KEY: ${SECRET_KEY:?set SECRET_KEY to a long random string in .env or the environment, see README}
+      # TRUST_PROXY_HEADERS: "true"  # only behind a TLS-terminating reverse proxy, see README
+      # PUBLIC_PROFILE_URL: https://ophirmangas.example.org  # the public address profile links are built on
+    volumes:
+      - ophir_mangas_data:/data
+      # - ./oauth.json:/config/oauth.json:ro  # optional SSO config file, see README
+
+volumes:
+  ophir_mangas_data:
