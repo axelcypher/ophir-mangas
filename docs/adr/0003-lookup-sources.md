@@ -1,0 +1,5 @@
+# Volumes come from free bibliographic services; barcodes are read without a library
+
+A volume is filled in from its ISBN by asking the Deutsche Nationalbibliothek (SRU, MARC 21), Google Books and Open Library, all free and without an API key, and merging what they say; a series from AniList's public GraphQL API (titles, authors, genres, status, cover); anything else from a product page through the link import and bookmarklet taken over from Ophir Figures. Paid or key-bound sources (ISBNdb, Amazon) were not used, so an instance needs no account anywhere. The DNB is asked first because most volumes collected here are German and it has the publisher's price and series numbering.
+
+The ISBN barcode is read with the browser's `BarcodeDetector` where it exists (Chrome on Android) and otherwise with a small EAN-13 decoder of our own over camera frames or a photo (Safari, Firefox). No barcode library is vendored: EAN-13 is a fixed, simple symbology, and the app has no build step or third-party scripts so far.
